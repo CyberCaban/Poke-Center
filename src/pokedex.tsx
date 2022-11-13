@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 const FIRST_POKEMONS = 10;
+let count = 0 //Нужна чтобы отрисовывать следующих покемонов
 
 type IPokemon = {
   name: string;
@@ -9,6 +10,7 @@ type IPokemon = {
 
 function Pokedex() {
   const [pokemons, setPokemons] = useState<IPokemon[]>();
+  const [PokemonsLoaded, setPokemonsLoaded] = useState(0)
   let url = "https://pokeapi.co/api/v2/pokedex/27/";
 
   useEffect(() => {
@@ -16,10 +18,10 @@ function Pokedex() {
       .then((response) => {
         return response.json();
       })
-      .then((data) => {
+      .then(async (data) => {
         let temp: IPokemon[] = [];
         for (let i = 0; i < FIRST_POKEMONS; i++) {
-          getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
+          await getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
             (res) => {
               temp.push({
                 name: data.pokemon_entries[i].pokemon_species.name,
@@ -29,7 +31,6 @@ function Pokedex() {
           );
         }
         setPokemons(temp);
-        console.log(pokemons);
       });
   }, []);
 
@@ -47,14 +48,59 @@ function Pokedex() {
       });
     return temp;
   }
+  
+  //UpperCaseFirstLetter
+  function UCFL(str:any) { 
+    if (!str) return str;
+  
+    return str[0].toUpperCase() + str.slice(1);
+  }
+
+  console.log("render");
+  
+
+  function loadMore() {
+    fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then(async (data) => {
+        let temp: IPokemon[] = [];
+        for (let i = count * 10; i < FIRST_POKEMONS + count  * 10; i++) {
+          setPokemonsLoaded(prev => prev + 1)
+          
+          await getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
+            (res) => {
+              temp.push({
+                name: data.pokemon_entries[i].pokemon_species.name,
+                photo: res,
+              });
+            }
+          );
+        }
+        setPokemons(prev=>prev?.concat(temp));
+        setPokemonsLoaded(0)
+      });
+      count += 1
+  }
 
   const names = pokemons?.map((item, index) => {
-    return <li key={index}>{item.name}</li>;
+    let poke_name = UCFL(item.name)
+    return (
+      <div key={index} className="pokemon_card">
+        <img src={item.photo} alt="" />
+        <p>{poke_name}</p>
+      </div>
+    );
   });
 
   return (
-    <div>
-      <ol className="pokemon">{names}</ol>
+    <div id="Pokedex">
+      <h1>Pokedex 7th Gen</h1>
+      <div className="pokemon_list">{names}</div>
+      <div id="loadMore" onClick={loadMore}>
+        <span>Load more Pokémon</span>
+      </div>
     </div>
   );
 }
