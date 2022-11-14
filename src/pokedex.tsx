@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import Modal from "./modal";
 
 const FIRST_POKEMONS = 10;
 let count = 0 //Нужна чтобы отрисовывать следующих покемонов
+let currentRegion = "National"
 
 type IPokemon = {
   name: string;
@@ -11,6 +13,8 @@ type IPokemon = {
 function Pokedex() {
   const [pokemons, setPokemons] = useState<IPokemon[]>();
   const [PokemonsLoaded, setPokemonsLoaded] = useState(0)
+  const [ModalInfo, setModalInfo] = useState('')
+  const [ShowModal, setShowModal] = useState(true)
   const [url, seturl] = useState("https://pokeapi.co/api/v2/pokedex/1/");
   const Pokedexes = [
     {
@@ -144,7 +148,6 @@ function Pokedex() {
             }
           );
         }
-        // console.log(temp);
         setPokemons(temp);
       });
   },[url]);
@@ -158,8 +161,6 @@ function Pokedex() {
       })
       .then((data) => {
         temp = data.sprites.front_default;
-        // console.log(data.sprites.front_default);
-        // console.log(data);
       });
     return temp;
   }
@@ -170,8 +171,6 @@ function Pokedex() {
   
     return str[0].toUpperCase() + str.slice(1);
   }
-
-  // console.log("render");
   
   function loadMore() {
     fetch(url)
@@ -182,51 +181,47 @@ function Pokedex() {
         let temp: IPokemon[] = [];
         // console.log(data.pokemon_entries[FIRST_POKEMONS + count * 10].entry_number);
         console.log(data.pokemon_entries);
-        if (data.pokemon_entries[FIRST_POKEMONS + count * 10]) {
-          for (let i = count * 10; i < FIRST_POKEMONS + count * 10; i++) {
-            setPokemonsLoaded(prev => prev + 1)
-            await getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
-              (res) => {
-                
-                temp.push({
-                  name: data.pokemon_entries[i].pokemon_species.name,
-                  photo: res,
-                });
-              }
-            );
-          }
-          setPokemons(prev=>prev?.concat(temp));
-          setPokemonsLoaded(0)
+        for (let i = count * 10; i < FIRST_POKEMONS + count * 10; i++) {
+          setPokemonsLoaded(prev => prev + 1)
+          await getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
+            (res) => {
+              
+              temp.push({
+                name: data.pokemon_entries[i].pokemon_species.name,
+                photo: res,
+              });
+            }
+          );
         }
-        else {
-          for (let i = count * 10; i < (data.pokemon_entries.lenght - data.pokemon_entries[count * 10]); i++) {
-            setPokemonsLoaded(prev => prev + 1)
-            await getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
-              (res) => {
-                
-                temp.push({
-                  name: data.pokemon_entries[i].pokemon_species.name,
-                  photo: res,
-                });
-              }
-            );
-          }
-          setPokemons(prev=>prev?.concat(temp));
-          setPokemonsLoaded(0)
-        }
+        setPokemons(prev=>prev?.concat(temp));
+        setPokemonsLoaded(0)
       });
       count += 1
   }
 
   function changeRegion(e:any) {
     seturl("https://pokeapi.co/api/v2/pokedex/" + `${e.target.value}` + "/")
+
+    for (let i = 0; i < Pokedexes.length; i++) {
+      if (Pokedexes[i].id == e.target.value) {
+        currentRegion = Pokedexes[i].name
+      }
+    }
+    
     count = 0
+  }
+
+  function modal(e:any) {
+    return <div id="mymodal" className="modal">
+        <span></span>
+        <p className="name">{e}</p>
+    </div>
   }
 
   const names = pokemons?.map((item, index) => {
     var poke_name = UCFL(item.name)
     return (
-      <div key={index} className="pokemon_card">
+      <div onClick={(e)=>modal(e)} key={index} className="pokemon_card">
         <img src={item.photo} alt="" />
         <p>{poke_name}</p>
       </div>
@@ -240,7 +235,7 @@ function Pokedex() {
   return (
     <div id="Pokedex">
       <div className="header _choosebox">
-        <h1>Pokedex Galar Region</h1>
+        <h1>Pokedex {currentRegion} Region</h1>
         <div>
           <select onClick={(e)=>changeRegion(e)} name="Pokedexes" id="">
             {pokedexOptions}
