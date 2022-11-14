@@ -8,7 +8,7 @@ type IPokemon = {
 };
 
 function Pokedex() {
-  const [pokemons, setPokemons] = useState<IPokemon[]>();
+  const [pokemons, setPokemons] = useState<IPokemon[]>([]);
   let url = "https://pokeapi.co/api/v2/pokedex/27/";
 
   useEffect(() => {
@@ -17,21 +17,23 @@ function Pokedex() {
         return response.json();
       })
       .then((data) => {
-        let temp: IPokemon[] = [];
+        let temp:IPokemon[] = [];
         for (let i = 0; i < FIRST_POKEMONS; i++) {
           getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
             (res) => {
               temp.push({
-                name: data.pokemon_entries[i].pokemon_species.name,
-                photo: res,
+                name: `${data.pokemon_entries[i].pokemon_species.name}`,
+                photo: `${res}`,
               });
+              
             }
-          );
-        }
+            );
+          }
+        console.log(temp);
         setPokemons(temp);
         console.log(pokemons);
       });
-  }, []);
+  },[]);
 
   async function getPokePhoto(PokeName: string): Promise<string> {
     const tempURL = `https://pokeapi.co/api/v2/pokemon/${PokeName}`;
@@ -49,12 +51,14 @@ function Pokedex() {
   }
 
   const names = pokemons?.map((item, index) => {
-    return <li key={index}>{item.name}</li>;
-  });
+    return `<li>${item.name}</li>`
+  })
 
   return (
     <div>
-      <ol className="pokemon">{names}</ol>
+      <ol className="pokemon">
+        {names}
+      </ol>
     </div>
   );
 }
