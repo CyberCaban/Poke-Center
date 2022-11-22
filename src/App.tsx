@@ -7,8 +7,8 @@ function App() {
   const [Loaded, setLoaded] = useState(0)
   return (
     <div className="App">
-      <Pokedex />
-      <LoadBar />
+      <Pokedex load={()=>setLoaded} />
+      <LoadBar load={Loaded}/>
     </div>
   );
 }

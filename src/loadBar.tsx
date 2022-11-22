@@ -1,8 +1,16 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
-function LoadBar(){
+type Props = {
+    load: number
+}
+
+function LoadBar({load}:Props){
     const [ShowBar, setShowBar] = useState("none")
-    const [Lenght, setLenght] = useState(5)
+    const [Length, setLength] = useState(5)
+
+    useEffect(()=>{
+        setLength(load)
+    },[load])
 
     function test() {
         {ShowBar == "none" ? setShowBar("block") : setShowBar("none")}
@@ -11,7 +19,7 @@ function LoadBar(){
     return(
         <div id="loadbar">
             <div style={{display: `${ShowBar}`}}  className="actualLoadBar">
-                <div className="bar" style={{width: `${10 * Lenght}` + "%"}}></div>
+                <div className="bar" style={{width: `${10 * Length}` + "%"}}></div>
             </div>
             <button onClick={test}>on/off</button>
         </div>

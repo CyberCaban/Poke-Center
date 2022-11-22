@@ -10,7 +10,11 @@ type IPokemon = {
   photo: string;
 };
 
-function Pokedex() {
+type Props = {
+  load: (number:number)=>void
+}
+
+function Pokedex({load}:Props) {
   const [pokemons, setPokemons] = useState<IPokemon[]>();
   const [PokemonsLoaded, setPokemonsLoaded] = useState(0)
   const [ModalInfo, setModalInfo] = useState('')
@@ -183,15 +187,19 @@ function Pokedex() {
         console.log(data.pokemon_entries);
         for (let i = count * 10; i < FIRST_POKEMONS + count * 10; i++) {
           setPokemonsLoaded(prev => prev + 1)
-          await getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
-            (res) => {
-              
-              temp.push({
-                name: data.pokemon_entries[i].pokemon_species.name,
-                photo: res,
-              });
-            }
-          );
+          try {
+            await getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
+              (res) => {
+                load(i)
+                temp.push({
+                  name: data.pokemon_entries[i].pokemon_species.name,
+                  photo: res,
+                });
+              }
+            );
+          }catch (e){
+            // console.log(e)
+          }
         }
         setPokemons(prev=>prev?.concat(temp));
         setPokemonsLoaded(0)
