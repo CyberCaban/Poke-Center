@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Modal from "./modal";
 
 const FIRST_POKEMONS = 10;
 let count = 0 //Нужна чтобы отрисовывать следующих покемонов
@@ -12,13 +11,12 @@ type IPokemon = {
 
 type Props = {
   load: (number:number)=>void
+  setShowModal: (string:string)=>void
 }
 
-function Pokedex({load}:Props) {
+function Pokedex({load,setShowModal}:Props) {
   const [pokemons, setPokemons] = useState<IPokemon[]>();
   const [PokemonsLoaded, setPokemonsLoaded] = useState(0)
-  const [ModalInfo, setModalInfo] = useState('')
-  const [ShowModal, setShowModal] = useState(true)
   const [url, seturl] = useState("https://pokeapi.co/api/v2/pokedex/1/");
   const Pokedexes = [
     {
@@ -183,8 +181,6 @@ function Pokedex({load}:Props) {
       })
       .then(async (data) => {
         let temp: IPokemon[] = [];
-        // console.log(data.pokemon_entries[FIRST_POKEMONS + count * 10].entry_number);
-        console.log(data.pokemon_entries);
         for (let i = count * 10; i < FIRST_POKEMONS + count * 10; i++) {
           setPokemonsLoaded(prev => prev + 1)
           try {
@@ -215,21 +211,21 @@ function Pokedex({load}:Props) {
         currentRegion = Pokedexes[i].name
       }
     }
-    
     count = 0
   }
 
-  function modal(e:any) {
-    return <div id="mymodal" className="modal">
-        <span></span>
-        <p className="name">{e}</p>
-    </div>
+  function getPokeInfo(e:any){
+    if (e.target.localName === "img"){
+      setShowModal(e.target.parentElement.innerText)
+    }else{
+      setShowModal(e.target.innerText)
+    }
   }
 
   const names = pokemons?.map((item, index) => {
-    var poke_name = UCFL(item.name)
+    const poke_name = UCFL(item.name);
     return (
-      <div onClick={(e)=>modal(e)} key={index} className="pokemon_card">
+      <div onClick={(e)=>getPokeInfo(e)} key={index} className="pokemon_card">
         <img src={item.photo} alt="" />
         <p>{poke_name}</p>
       </div>
