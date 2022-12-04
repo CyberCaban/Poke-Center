@@ -87,12 +87,21 @@
   display: block; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  width: 100px; /* Full width */
-  height: 100px; /* Full height */
+  width: 500px; /* Full width */
+  height: 400px; /* Full height */
+  top: 25vh;
   overflow: auto; /* Enable scroll if needed */
   padding: 10px;
   border-radius: 10px;
   color: white;
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+}
+
+.stat_list{
+  display: flex;
+  flex-direction: row;
+}
+.stat{
+  margin: 5px;
 }

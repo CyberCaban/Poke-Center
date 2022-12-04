@@ -14,6 +14,13 @@ type Props = {
   setShowModal: (string:string)=>void
 }
 
+//UpperCaseFirstLetter
+export function UCFL(str:any) {
+  if (!str) return str;
+
+  return str[0].toUpperCase() + str.slice(1);
+}
+
 function Pokedex({load,setShowModal}:Props) {
   const [pokemons, setPokemons] = useState<IPokemon[]>();
   const [PokemonsLoaded, setPokemonsLoaded] = useState(0)
@@ -165,13 +172,6 @@ function Pokedex({load,setShowModal}:Props) {
         temp = data.sprites.front_default;
       });
     return temp;
-  }
-  
-  //UpperCaseFirstLetter
-  function UCFL(str:any) { 
-    if (!str) return str;
-  
-    return str[0].toUpperCase() + str.slice(1);
   }
   
   function loadMore() {
