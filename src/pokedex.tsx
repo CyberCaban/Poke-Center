@@ -232,8 +232,8 @@ function Pokedex({load,setShowModal}:Props) {
     );
   });
 
-  const pokedexOptions = Pokedexes.map((item) => {
-    return <option value={item.id}>{item.name}</option>
+  const pokedexOptions = Pokedexes.map((item,index) => {
+    return <option value={item.id} key={index}>{item.name}</option>
   })
 
   return (
