@@ -4,13 +4,12 @@ import {useState} from 'react'
 import Modal from "./modal";
 
 function App() {
-    const [Loaded, setLoaded] = useState(0)
-    const [ShowModal, setShowModal] = useState('')
+    const [pokemonName, setPokemonName] = useState('')
 
     return (
     <div className="App">
-      <Pokedex load={()=>setLoaded} setShowModal={setShowModal}/>
-        <Modal showModal={ShowModal} closeModal={setShowModal}/>
+      <Pokedex setPokemonName={setPokemonName}/>
+        <Modal pokemonName={pokemonName} closeModal={setPokemonName}/>
     </div>
   );
 }

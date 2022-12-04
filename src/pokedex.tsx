@@ -10,8 +10,7 @@ type IPokemon = {
 };
 
 type Props = {
-  load: (number:number)=>void
-  setShowModal: (string:string)=>void
+  setPokemonName: (string:string)=>void
 }
 
 //UpperCaseFirstLetter
@@ -21,7 +20,7 @@ export function UCFL(str:any) {
   return str[0].toUpperCase() + str.slice(1);
 }
 
-function Pokedex({load,setShowModal}:Props) {
+function Pokedex({setPokemonName}:Props) {
   const [pokemons, setPokemons] = useState<IPokemon[]>();
   const [PokemonsLoaded, setPokemonsLoaded] = useState(0)
   const [url, seturl] = useState("https://pokeapi.co/api/v2/pokedex/1/");
@@ -148,7 +147,7 @@ function Pokedex({load,setShowModal}:Props) {
       .then(async (data) => {
         let temp: IPokemon[] = [];
         for (let i = 0; i < FIRST_POKEMONS; i++) {
-          await getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
+          await getPokeSprite(data.pokemon_entries[i].pokemon_species.name).then(
             (res) => {
               temp.push({
                 name: `${data.pokemon_entries[i].pokemon_species.name}`,
@@ -161,7 +160,7 @@ function Pokedex({load,setShowModal}:Props) {
       });
   },[url]);
 
-  async function getPokePhoto(PokeName: string): Promise<string> {
+  async function getPokeSprite(PokeName: string): Promise<string> {
     const tempURL = `https://pokeapi.co/api/v2/pokemon/${PokeName}`;
     let temp: string = "";
     await fetch(tempURL)
@@ -184,9 +183,8 @@ function Pokedex({load,setShowModal}:Props) {
         for (let i = count * 10; i < FIRST_POKEMONS + count * 10; i++) {
           setPokemonsLoaded(prev => prev + 1)
           try {
-            await getPokePhoto(data.pokemon_entries[i].pokemon_species.name).then(
+            await getPokeSprite(data.pokemon_entries[i].pokemon_species.name).then(
               (res) => {
-                load(i)
                 temp.push({
                   name: data.pokemon_entries[i].pokemon_species.name,
                   photo: res,
@@ -216,9 +214,9 @@ function Pokedex({load,setShowModal}:Props) {
 
   function getPokeInfo(e:any){
     if (e.target.localName === "img"){
-      setShowModal(e.target.parentElement.innerText)
+      setPokemonName(e.target.parentElement.innerText)
     }else{
-      setShowModal(e.target.innerText)
+      setPokemonName(e.target.innerText)
     }
   }
 

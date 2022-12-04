@@ -73,25 +73,12 @@
   color: #fff;
 }
 
-.actualLoadBar{
-  width: 100px;
-  height: 10px;
-  border-radius: 10px;
-  border: 1px black solid;
-  overflow: hidden;
-}
-
-.bar{
-  height: 20px;
-  background-color: #30a7d7;
-}
-
 .modal {
   display: flex; /* Hidden by default */
   flex-direction: column;
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  width: 500px; /* Full width */
+  width: 505px; /* Full width */
   top: 25vh;
   overflow: auto; /* Enable scroll if needed */
   padding: 10px;
@@ -125,6 +112,10 @@
 
 .stat{
   margin: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 
@@ -160,6 +151,7 @@
     display: flex;
     flex-direction: column;
     width: 175px;
+    height: 400px;
   }
   .modal_title{
     flex-direction: column;
