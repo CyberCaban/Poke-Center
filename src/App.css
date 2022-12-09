@@ -21,6 +21,15 @@
 #Pokedex{
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.Pokedex_title{
+  font-size: xxx-large;
+}
+
+.select_region_box{
+  display: flex;
 }
 
 .pokemon_card{
@@ -144,6 +153,13 @@
 }
 
 @media (max-width:430px) {
+  .Pokedex_title{
+    font-size: x-large;
+    display: flex;
+  }
+  .select_region_box{
+    justify-content: center;
+  }
   .pokemon_list{
     width: 420px;
   }

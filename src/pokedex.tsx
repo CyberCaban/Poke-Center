@@ -237,9 +237,9 @@ function Pokedex({setPokemonName}:Props) {
   return (
     <div id="Pokedex">
       <div className="header _choosebox">
-        <h1>Pokedex {currentRegion} Region</h1>
-        <div>
-          <select onClick={(e)=>changeRegion(e)} name="Pokedexes" id="">
+        <h1 className="Pokedex_title">Pokedex {currentRegion} Region</h1>
+        <div className="select_region_box">
+          <select onClick={(e)=>changeRegion(e)} name="Pokedexes" id="" size={1}>
             {pokedexOptions}
           </select>
         </div>
