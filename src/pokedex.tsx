@@ -246,7 +246,7 @@ function Pokedex({setPokemonName}:Props) {
       </div>
       <div className="pokemon_list">{names}</div>
       <div id="loadMore" onClick={loadMore}>
-        <span>Load more Pokémon</span>
+        <p>Load more Pokémon</p>
       </div>
     </div>
   );
