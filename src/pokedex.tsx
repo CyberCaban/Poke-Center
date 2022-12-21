@@ -24,6 +24,7 @@ function Pokedex({setPokemonName}:Props) {
   const [pokemons, setPokemons] = useState<IPokemon[]>();
   const [PokemonsLoaded, setPokemonsLoaded] = useState(0)
   const [url, seturl] = useState("https://pokeapi.co/api/v2/pokedex/1/");
+  //to add more regions just add object with name and ID of region from pokeapi.co
   const Pokedexes = [
     {
       name: "National",
@@ -136,6 +137,10 @@ function Pokedex({setPokemonName}:Props) {
     {
       name: "Crown Tundra",
       id:29
+    },
+    {
+      name: "Hisui",
+      id:30
     },
   ]
 
