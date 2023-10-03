@@ -142,6 +142,14 @@ function Pokedex({setPokemonName}:Props) {
       name: "Hisui",
       id:30
     },
+    {
+      name: "Paldea",
+      id:31
+    },
+    {
+      name: "Kitakami",
+      id:32
+    },
   ]
 
   useEffect(() => {
